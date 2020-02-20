@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo '==== preinst start ===='
+
+#DEBHELPER#
+
+echo '==== preinst end ===='

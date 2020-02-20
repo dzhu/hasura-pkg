@@ -1,0 +1,13 @@
+Source: hasura
+Section: unknown
+Priority: extra
+Maintainer: test <test@example.com>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.8
+Homepage: https://hasura.io
+
+Package: hasura
+Architecture: amd64
+Multi-Arch: foreign
+Depends: libpq-dev, ${misc:Depends}, ${shlibs:Depends}
+Description: Hasura
