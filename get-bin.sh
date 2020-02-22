@@ -1,4 +1,6 @@
-img_id=$(docker create hasura/graphql-engine:v1.1.0)
-mkdir -p bin
-docker cp "$img_id":/bin/graphql-engine hasura-1.1.0/bin
+version="${1:-1.0.0}"
+
+img_id=$(docker create hasura/graphql-engine:v"$version")
+mkdir -p hasura-"$version"
+docker cp "$img_id":/bin/graphql-engine hasura-"$version"/
 docker rm "$img_id" > /dev/null

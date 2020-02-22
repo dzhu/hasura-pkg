@@ -2,16 +2,22 @@
 
 set -ex
 
+version="${1:-1.0.0}"
+
 # Create an "upstream tarball" in a fresh directory.
 rm -rf build
 mkdir build
-tar czf build/hasura-1.1.0.tar.gz hasura-1.1.0
+tar czf build/hasura-"$version".tar.gz hasura-"$version"
 cd build
 
 # Now work with the tarball normally.
-tar xf hasura-1.1.0.tar.gz
-cp -rp ../debian hasura-1.1.0
-ln -s hasura-1.1.0.tar.gz hasura_1.1.0.orig.tar.gz
+tar xf hasura-"$version".tar.gz
+cp -rp ../debian hasura-"$version"
+# Hack: edit the version in the changelog, since it's supposed to match the
+# package version.
+sed -i "s|hasura (.*)|hasura ($version-1)|" hasura-"$version"/debian/changelog
+cat hasura-"$version"/debian/changelog
+ln -s hasura-"$version".tar.gz hasura_"$version".orig.tar.gz
 
 owner="$(id -u)":"$(id -g)"
 ubuntu_version="${ubuntu_version:-18.04}"
@@ -19,8 +25,8 @@ ubuntu_version="${ubuntu_version:-18.04}"
 docker run \
   --rm \
   -v "$PWD":/tmp/build \
-  -e owner:"$owner" \
   local/pkg-dev \
-  sh -c 'cd /tmp/build/hasura-1.1.0 && debuild && chown -R "$owner" .. && debian/rules clean'
+  sh -c "echo \"$owner\" \"$version\" && cd /tmp/build/hasura-\"$version\" && debuild && chown -R \"$owner\" .. && debian/rules clean"
 
 tree
+dpkg -c ./*.deb
