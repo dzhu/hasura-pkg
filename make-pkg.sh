@@ -7,7 +7,7 @@ version="${1:-1.0.0}"
 # Create an "upstream tarball" in a fresh directory.
 rm -rf build
 mkdir build
-tar czf build/hasura-"$version".tar.gz hasura-"$version"
+tar czf build/hasura-"$version".tar.gz --xform "s|.*|hasura-$version/hasura|" bin/hasura-"$version"
 cd build
 
 # Now work with the tarball normally.

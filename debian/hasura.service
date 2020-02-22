@@ -3,4 +3,4 @@ Description=hasura
 
 [Service]
 EnvironmentFile=-/etc/hasura/hasura.conf
-ExecStart=/usr/bin/graphql-engine serve
+ExecStart=/usr/bin/hasura serve
