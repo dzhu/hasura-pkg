@@ -4,3 +4,24 @@ Description=hasura
 [Service]
 EnvironmentFile=-/etc/hasura/hasura.conf
 ExecStart=/usr/bin/hasura serve
+
+# Security/sandboxing settings.
+CapabilityBoundingSet=
+DynamicUser=true
+LockPersonality=true
+PrivateDevices=true
+PrivateUsers=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+UMask=077
