@@ -1,7 +1,7 @@
 Source: hasura
-Section: unknown
-Priority: extra
-Maintainer: test <test@example.com>
+Section: database
+Priority: optional
+Maintainer: Determined AI <hello@determined.ai>
 Build-Depends: debhelper (>=11)
 Standards-Version: 3.9.8
 Homepage: https://hasura.io
@@ -10,4 +10,4 @@ Package: hasura
 Architecture: amd64
 Multi-Arch: foreign
 Depends: libpq-dev, ${misc:Depends}, ${shlibs:Depends}
-Description: Hasura
+Description: Postgres-to-GraphQL server
