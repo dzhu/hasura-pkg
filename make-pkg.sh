@@ -26,7 +26,7 @@ docker run \
   --rm \
   -v "$PWD":/tmp/build \
   local/pkg-dev \
-  sh -c "echo \"$owner\" \"$version\" && cd /tmp/build/hasura-\"$version\" && debuild && chown -R \"$owner\" .. && debian/rules clean"
+  sh -c "echo \"$owner\" \"$version\" && cd /tmp/build/hasura-\"$version\" && debuild --no-lintian && chown -R \"$owner\" .. && debian/rules clean"
 
 tree
 dpkg -c ./*.deb
