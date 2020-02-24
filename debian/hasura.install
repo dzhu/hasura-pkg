@@ -1,2 +1,2 @@
-hasura usr/bin
+graphql-engine debian/bin/hasura usr/bin
 debian/hasura.conf etc/hasura

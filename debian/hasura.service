@@ -2,7 +2,6 @@
 Description=hasura
 
 [Service]
-EnvironmentFile=-/etc/hasura/hasura.conf
 ExecStart=/usr/bin/hasura serve
 
 # Security/sandboxing settings.
