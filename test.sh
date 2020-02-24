@@ -9,4 +9,4 @@ docker run --init --rm \
   -e HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   "$@" \
   ubuntu:"$ubuntu_version" \
-  sh -c 'apt-get update && apt-get install -y --no-install-recommends /tmp/hasura.deb && dpkg -L hasura && graphql-engine serve'
+  sh -c 'apt-get update && apt-get install -y --no-install-recommends /tmp/hasura.deb && dpkg -L hasura && hasura serve'
