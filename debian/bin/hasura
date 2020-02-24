@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -o allexport
+. /etc/hasura/hasura.conf
+set +o allexport
+exec graphql-engine "$@"
