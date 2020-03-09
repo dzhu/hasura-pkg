@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -o allexport
 . /etc/hasura/hasura.conf
