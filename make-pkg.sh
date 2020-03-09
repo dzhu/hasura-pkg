@@ -4,29 +4,32 @@ set -ex
 
 version="${1:-1.0.0}"
 
+if [ ! -f bin/graphql-engine-"$version" ]; then
+  mkdir -p bin
+  img_id=$(docker create hasura/graphql-engine:v"$version")
+  docker cp "$img_id":/bin/graphql-engine bin/graphql-engine-"$version"
+  docker rm "$img_id" >/dev/null
+fi
+
 # Create an "upstream tarball" in a fresh directory.
 rm -rf build
 mkdir build
-tar czf build/hasura-"$version".tar.gz --xform "s|.*|hasura-$version/graphql-engine|" bin/graphql-engine-"$version"
+tar czvf build/hasura-"$version".tar.gz --xform "s|.*|hasura-$version/graphql-engine|" bin/graphql-engine-"$version"
 cd build
 
-# Now work with the tarball normally.
-tar xf hasura-"$version".tar.gz
+# Now copy in the Debian things and work with the tarball normally.
+tar xvf hasura-"$version".tar.gz
 cp -rp ../debian hasura-"$version"
 # Hack: edit the version in the changelog, since it's supposed to match the
-# package version.
+# package version. (Normally there would actually be an updated changelog for
+# each version, but we're just using one file for simplicity.)
 sed -i "s|hasura (.*)|hasura ($version-1)|" hasura-"$version"/debian/changelog
-cat hasura-"$version"/debian/changelog
 ln -s hasura-"$version".tar.gz hasura_"$version".orig.tar.gz
 
-owner="$(id -u)":"$(id -g)"
-ubuntu_version="${ubuntu_version:-18.04}"
+cd hasura-"$version"
 
-docker run \
-  --rm \
-  -v "$PWD":/tmp/build \
-  local/pkg-dev \
-  sh -c "echo \"$owner\" \"$version\" && cd /tmp/build/hasura-\"$version\" && debuild --no-lintian && chown -R \"$owner\" .. && debian/rules clean"
+debuild --no-lintian
+debian/rules clean
 
-tree
+cd ..
 dpkg -c ./*.deb
