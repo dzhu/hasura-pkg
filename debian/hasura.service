@@ -4,7 +4,9 @@ Description=hasura
 [Service]
 ExecStart=/usr/bin/hasura serve
 
-# Security/sandboxing settings.
+# Add in some security/sandboxing settings. The list of settings was derived
+# from https://wiki.debian.org/ServiceSandboxing and the `systemd-analyze
+# security` command.
 CapabilityBoundingSet=
 DynamicUser=true
 LockPersonality=true
