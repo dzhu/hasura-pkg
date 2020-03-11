@@ -11,25 +11,20 @@ if [ ! -f bin/graphql-engine-"$version" ]; then
   docker rm "$img_id" >/dev/null
 fi
 
-# Create an "upstream tarball" in a fresh directory.
 rm -rf build
-mkdir build
-tar czvf build/hasura-"$version".tar.gz --xform "s|.*|hasura-$version/graphql-engine|" bin/graphql-engine-"$version"
-cd build
+mkdir -p build/hasura
+cp bin/graphql-engine-"$version" build/hasura/graphql-engine
+cd build/hasura
 
-# Now copy in the Debian things and work with the tarball normally.
-tar xvf hasura-"$version".tar.gz
-cp -rp ../debian hasura-"$version"
+cp -rp ../../debian .
 # Hack: edit the version in the changelog, since it's supposed to match the
 # package version. (Normally there would actually be an updated changelog for
 # each version, but we're just using one file for simplicity.)
-sed -i "s|hasura (.*)|hasura ($version-1)|" hasura-"$version"/debian/changelog
-ln -s hasura-"$version".tar.gz hasura_"$version".orig.tar.gz
+sed -i "s|hasura (.*)|hasura ($version-1)|" debian/changelog
 
-cd hasura-"$version"
-
-debuild --no-lintian
+dpkg-buildpackage -rfakeroot -us -uc -ui -b
 debian/rules clean
 
 cd ..
+ls -R
 dpkg -c ./*.deb
